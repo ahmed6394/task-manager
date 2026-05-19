@@ -1,0 +1,52 @@
+namespace: todo
+
+postgres:
+  image:
+    repository: "postgres"
+    tag: "15"
+  service:
+    port: 5432
+  db:
+    name: "tododb"
+    user: "todouser"
+    password: "todopass"
+  persistence:
+    enabled: false
+
+frontend:
+  image:
+    repository: "ahmed63/todo-frontend"
+    tag: "v1"
+  replicaCount: 2
+  service:
+    port: 80
+    nodePort: 30080
+
+backend:
+  image:
+    repository: "ahmed63/todo-backend"
+    tag: "v1"
+  replicaCount: 2
+  service:
+    port: 8000
+  env:
+    databaseEcho: "false"
+  secrets:
+    databaseUrl: ""
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "250m"
+      memory: "256Mi"
+
+ingress:
+  enabled: true
+  host: ""
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
