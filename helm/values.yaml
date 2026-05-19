@@ -1,0 +1,10 @@
+deployment:
+  name: my-deployment
+  replicas: 2
+  image: nginx
+
+service:
+  name: my-service
+  port: 80
+  targetPort: 80
+  type: NodePort
