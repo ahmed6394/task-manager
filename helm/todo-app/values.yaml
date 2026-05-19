@@ -1,9 +1,22 @@
 namespace: todo
 
+postgres:
+  image:
+    repository: "postgres"
+    tag: "15"
+  service:
+    port: 5432
+  db:
+    name: "tododb"
+    user: "todouser"
+    password: "todopass"
+  persistence:
+    enabled: false
+    
 frontend:
   image:
     repository: "ahmed63/todo-frontend"
-    tag: "v1.0.0"
+    tag: "v1"
   replicaCount: 2
   service:
     port: 80
@@ -11,7 +24,7 @@ frontend:
 backend:
   image:
     repository: "ahmed63/todo-backend"
-    tag: "v1.0.0"
+    tag: "v1"
   replicaCount: 2
   service:
     port: 8000
