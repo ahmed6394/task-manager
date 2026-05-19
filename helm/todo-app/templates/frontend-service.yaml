@@ -10,4 +10,4 @@ spec:
     - protocol: TCP
       port: {{ .Values.frontend.service.port }}
       targetPort: {{ .Values.frontend.service.port }}
-  type: ClusterIP
+  type: NodePort

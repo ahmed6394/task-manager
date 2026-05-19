@@ -12,7 +12,7 @@ postgres:
     password: "todopass"
   persistence:
     enabled: false
-    
+
 frontend:
   image:
     repository: "ahmed63/todo-frontend"
@@ -20,6 +20,7 @@ frontend:
   replicaCount: 2
   service:
     port: 80
+    nodePort: 30080
 
 backend:
   image:
