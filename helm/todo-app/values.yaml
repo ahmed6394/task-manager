@@ -1,10 +1,38 @@
-deployment:
-  name: my-deployment
-  replicas: 2
-  image: nginx
+namespace: todo
 
-service:
-  name: my-service
-  port: 80
-  targetPort: 80
-  type: NodePort
+frontend:
+  image:
+    repository: "ahmed63/todo-frontend"
+    tag: "v1.0.0"
+  replicaCount: 2
+  service:
+    port: 80
+
+backend:
+  image:
+    repository: "ahmed63/todo-backend"
+    tag: "v1.0.0"
+  replicaCount: 2
+  service:
+    port: 8000
+  env:
+    databaseEcho: "false"
+  secrets:
+    databaseUrl: ""
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "250m"
+      memory: "256Mi"
+
+ingress:
+  enabled: true
+  host: ""
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70

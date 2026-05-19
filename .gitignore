@@ -63,3 +63,8 @@ Thumbs.db
 # Environment & Secrets
 .env
 .env.local
+
+
+# helm secrets
+helm/todo-app/values-dev.private.yaml
+helm/todo-app/instructions.md
