@@ -16,7 +16,7 @@ postgres:
 frontend:
   image:
     repository: "ahmed63/todo-frontend"
-    tag: "v1"
+    tag: "v2"
   replicaCount: 2
   service:
     port: 80
