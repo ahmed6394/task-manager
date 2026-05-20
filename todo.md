@@ -29,21 +29,21 @@ Final project story:
 
 ## 0.1 Define the final architecture
 
-- [ ] Frontend runs as an Angular container.
-- [ ] Backend runs as a FastAPI container.
-- [ ] PostgreSQL runs on AWS RDS, not inside Kubernetes for production.
-- [ ] Images are stored in AWS ECR.
-- [ ] Application runs on AWS EKS.
-- [ ] External traffic enters through AWS Load Balancer Controller.
-- [ ] Terraform provisions AWS infrastructure.
-- [ ] Ansible handles admin/bootstrap/configuration automation.
-- [ ] GitHub Actions handles CI/CD.
-- [ ] Prometheus and Grafana provide monitoring and dashboards.
-- [ ] Optional: Argo CD handles GitOps deployment.
+- [x] Frontend runs as an Angular container.
+- [x] Backend runs as a FastAPI container.
+- [x] PostgreSQL runs on AWS RDS, not inside Kubernetes for production.
+- [x] Images are stored in AWS ECR.
+- [x] Application runs on AWS EKS.
+- [x] External traffic enters through AWS Load Balancer Controller.
+- [x] Terraform provisions AWS infrastructure.
+- [x] Ansible handles admin/bootstrap/configuration automation.
+- [x] GitHub Actions handles CI/CD.
+- [x] Prometheus and Grafana provide monitoring and dashboards.
+- [x] Optional: Argo CD handles GitOps deployment.
 
 ## 0.2 Create target repository structure
 
-- [ ] Restructure the repository like this:
+- [x] Restructure the repository like this:
 
 ```text
 todo-list/
@@ -90,36 +90,36 @@ todo-list/
 
 ## 0.3 Define naming conventions
 
-- [ ] Choose AWS region, for example `eu-central-1`.
-- [ ] Choose project name, for example `todo-devops`.
-- [ ] Choose environments:
-  - [ ] `dev`
-  - [ ] `prod`, optional for portfolio
-- [ ] Choose EKS cluster names:
-  - [ ] `todo-devops-dev`
-  - [ ] `todo-devops-prod`
-- [ ] Choose ECR repository names:
-  - [ ] `todo-frontend`
-  - [ ] `todo-backend`
-- [ ] Choose Kubernetes namespace:
-  - [ ] `todo`
+- [x] Choose AWS region, for example `eu-central-1`.
+- [x] Choose project name, for example `todo-devops`.
+- [x] Choose environments:
+  - [x] `dev`
+  - [x] `prod`, optional for portfolio
+- [x] Choose EKS cluster names:
+  - [x] `todo-devops-dev`
+  - [x] `todo-devops-prod`
+- [x] Choose ECR repository names:
+  - [x] `todo-frontend`
+  - [x] `todo-backend`
+- [x] Choose Kubernetes namespace:
+  - [x] `todo`
 
 ## 0.4 Create project branches
 
-- [ ] Create `main` branch.
-- [ ] Create `dev` branch.
-- [ ] Create feature branches using this style:
-  - [ ] `feature/backend-fastapi`
-  - [ ] `feature/docker-compose`
-  - [ ] `feature/terraform-eks`
-  - [ ] `feature/github-actions`
-  - [ ] `feature/monitoring`
+- [x] Create `main` branch.
+- [x] Create `dev` branch.
+- [x] Create feature branches using this style:
+  - [x] `feature/backend-fastapi`
+  - [x] `feature/docker-compose`
+  - [x] `feature/terraform-eks`
+  - [x] `feature/github-actions`
+  - [x] `feature/monitoring`
 
 ## Deliverable
 
-- [ ] Clean repository structure.
-- [ ] Clear naming convention.
-- [ ] Project roadmap committed as `TODO.md`.
+- [x] Clean repository structure.
+- [x] Clear naming convention.
+- [x] Project roadmap committed as `TODO.md`.
 
 ---
 
@@ -127,8 +127,8 @@ todo-list/
 
 ## 1.1 Prepare frontend
 
-- [ ] Move current Angular code into `frontend/` if not already done.
-- [ ] Confirm the app runs locally:
+- [x] Move current Angular code into `frontend/` if not already done.
+- [x] Confirm the app runs locally:
 
 ```bash
 cd frontend
@@ -136,15 +136,15 @@ npm install
 npm start
 ```
 
-- [ ] Add environment configuration for API URL.
-- [ ] Create frontend production build command.
-- [ ] Add a simple frontend health route or static landing page check.
-- [ ] Update frontend to call backend API through `/api`.
+- [x] Add environment configuration for API URL.
+- [x] Create frontend production build command.
+- [x] Add a simple frontend health route or static landing page check.
+- [x] Update frontend to call backend API through `/api`.
 
 ## 1.2 Create FastAPI backend
 
-- [ ] Create `backend/` directory.
-- [ ] Create FastAPI project structure:
+- [x] Create `backend/` directory.
+- [x] Create FastAPI project structure:
 
 ```text
 backend/
@@ -161,52 +161,52 @@ backend/
   Dockerfile
 ```
 
-- [ ] Create `/health` endpoint.
-- [ ] Create `/api/todos` endpoints:
-  - [ ] `GET /api/todos`
-  - [ ] `POST /api/todos`
-  - [ ] `GET /api/todos/{id}`
-  - [ ] `PUT /api/todos/{id}`
-  - [ ] `DELETE /api/todos/{id}`
-- [ ] Add database connection using environment variables.
-- [ ] Add SQLAlchemy or SQLModel.
-- [ ] Add Alembic for migrations.
-- [ ] Add basic tests with `pytest`.
+- [x] Create `/health` endpoint.
+- [x] Create `/api/todos` endpoints:
+  - [x] `GET /api/todos`
+  - [x] `POST /api/todos`
+  - [x] `GET /api/todos/{id}`
+  - [x] `PUT /api/todos/{id}`
+  - [x] `DELETE /api/todos/{id}`
+- [x] Add database connection using environment variables.
+- [x] Add SQLAlchemy or SQLModel.
+- [x] Add Alembic for migrations.
+- [x] Add basic tests with `pytest`.
 
 ## 1.3 Add PostgreSQL locally
 
-- [ ] Add PostgreSQL service to `docker-compose.yml`.
-- [ ] Define database environment variables:
-  - [ ] `POSTGRES_DB`
-  - [ ] `POSTGRES_USER`
-  - [ ] `POSTGRES_PASSWORD`
-  - [ ] `DATABASE_URL`
-- [ ] Confirm backend can connect to PostgreSQL.
-- [ ] Run initial migration.
-- [ ] Test CRUD operations.
+- [x] Add PostgreSQL service to `docker-compose.yml`.
+- [x] Define database environment variables:
+  - [x] `POSTGRES_DB`
+  - [x] `POSTGRES_USER`
+  - [x] `POSTGRES_PASSWORD`
+  - [x] `DATABASE_URL`
+- [x] Confirm backend can connect to PostgreSQL.
+- [x] Run initial migration.
+- [x] Test CRUD operations.
 
 ## 1.4 Add local Docker Compose
 
-- [ ] Create root-level `docker-compose.yml`.
-- [ ] Add services:
-  - [ ] `frontend`
-  - [ ] `backend`
-  - [ ] `postgres`
-- [ ] Confirm this command works:
+- [x] Create root-level `docker-compose.yml`.
+- [x] Add services:
+  - [x] `frontend`
+  - [x] `backend`
+  - [x] `postgres`
+- [x] Confirm this command works:
 
 ```bash
 docker compose up --build
 ```
 
-- [ ] Confirm frontend can call backend.
-- [ ] Confirm backend can read/write PostgreSQL data.
+- [x] Confirm frontend can call backend.
+- [x] Confirm backend can read/write PostgreSQL data.
 
 ## Deliverable
 
-- [ ] Full-stack app works locally.
-- [ ] Angular frontend talks to FastAPI backend.
-- [ ] FastAPI backend talks to PostgreSQL.
-- [ ] Docker Compose starts the whole app.
+- [x] Full-stack app works locally.
+- [x] Angular frontend talks to FastAPI backend.
+- [x] FastAPI backend talks to PostgreSQL.
+- [x] Docker Compose starts the whole app.
 
 ---
 
@@ -214,13 +214,13 @@ docker compose up --build
 
 ## 2.1 Frontend Dockerfile
 
-- [ ] Create `frontend/Dockerfile`.
-- [ ] Use multi-stage build:
-  - [ ] Node stage builds Angular app.
-  - [ ] Nginx stage serves static files.
-- [ ] Add `frontend/nginx.conf`.
-- [ ] Configure Nginx to route `/api` requests to backend if needed.
-- [ ] Confirm build works:
+- [x] Create `frontend/Dockerfile`.
+- [x] Use multi-stage build:
+  - [x] Node stage builds Angular app.
+  - [x] Nginx stage serves static files.
+- [x] Add `frontend/nginx.conf`.
+- [x] Configure Nginx to route `/api` requests to backend if needed.
+- [x] Confirm build works:
 
 ```bash
 docker build -t todo-frontend:local ./frontend
@@ -228,12 +228,12 @@ docker build -t todo-frontend:local ./frontend
 
 ## 2.2 Backend Dockerfile
 
-- [ ] Create `backend/Dockerfile`.
-- [ ] Use lightweight Python image.
-- [ ] Install dependencies from `requirements.txt`.
-- [ ] Run app with `uvicorn`.
-- [ ] Expose port `8000`.
-- [ ] Confirm build works:
+- [x] Create `backend/Dockerfile`.
+- [x] Use lightweight Python image.
+- [x] Install dependencies from `requirements.txt`.
+- [x] Run app with `uvicorn`.
+- [x] Expose port `8000`.
+- [x] Confirm build works:
 
 ```bash
 docker build -t todo-backend:local ./backend
@@ -241,123 +241,112 @@ docker build -t todo-backend:local ./backend
 
 ## 2.3 Image tagging strategy
 
-- [ ] Use Git commit SHA as image tag.
-- [ ] Use semantic tags for releases.
-- [ ] Avoid relying on `latest` for deployment.
-- [ ] Final tag examples:
-  - [ ] `todo-frontend:<git-sha>`
-  - [ ] `todo-backend:<git-sha>`
+- [x] Use Git commit SHA as image tag.
+- [x] Use semantic tags for releases.
+- [x] Avoid relying on `latest` for deployment.
+- [x] Final tag examples:
+  - [x] `todo-frontend:<git-sha>`
+  - [x] `todo-backend:<git-sha>`
 
 ## Deliverable
 
-- [ ] Frontend image builds successfully.
-- [ ] Backend image builds successfully.
-- [ ] Docker Compose can use local images.
-- [ ] Image tagging strategy documented.
+- [x] Frontend image builds successfully.
+- [x] Backend image builds successfully.
+- [x] Docker Compose can use local images.
+- [x] Image tagging strategy documented.
 
 ---
 
 # Phase 3 — Kubernetes and Helm
 
-## 3.1 Create initial Kubernetes manifests
+## 3.1 Create Helm chart
 
-- [ ] Create Kubernetes namespace:
-
-```text
-helm/todo-app/templates/namespace.yaml
-```
-
-- [ ] Create frontend Kubernetes resources:
-  - [ ] Deployment
-  - [ ] Service
-  - [ ] ConfigMap if needed
-
-- [ ] Create backend Kubernetes resources:
-  - [ ] Deployment
-  - [ ] Service
-  - [ ] ConfigMap
-  - [ ] Secret reference
-  - [ ] Liveness probe
-  - [ ] Readiness probe
-  - [ ] Resource requests and limits
-
-## 3.2 Create Helm chart
-
-- [ ] Create chart:
+- [x] Create chart:
 
 ```bash
 helm create helm/todo-app
 ```
 
-- [ ] Clean unnecessary default templates.
-- [ ] Add templates:
-  - [ ] `frontend-deployment.yaml`
-  - [ ] `frontend-service.yaml`
-  - [ ] `backend-deployment.yaml`
-  - [ ] `backend-service.yaml`
-  - [ ] `ingress.yaml`
-  - [ ] `configmap.yaml`
-  - [ ] `secret.yaml`
-  - [ ] `hpa.yaml`
+## 3.2 Create initial Kubernetes manifests
+
+- [x] Create Kubernetes namespace:
+
+```text
+helm/todo-app/templates/namespace.yaml
+```
+
+- [x] Create frontend Kubernetes resources:
+  - [x] Deployment
+  - [x] Service
+
+- [x] Create Postgres Kubernetes resources:
+  - [x] Deployment
+  - [x] Service
+  - [x] Secret reference
+  
+- [x] Create backend Kubernetes resources:
+  - [x] Deployment
+  - [x] Service
+  - [x] Secret reference
+  - [x] Resource requests and limits
+
+- [x] Clean unnecessary default templates.
+- [x] Add templates:
+  - [x] `frontend-deployment.yaml`
+  - [x] `frontend-service.yaml`
+  - [x] `backend-deployment.yaml`
+  - [x] `backend-service.yaml`
+  - [x] `postgres-deployment.yaml`
+  - [x] `postgres-service.yaml`
+  - [x] `ingress.yaml`
+  - [x] `secret.yaml`
+  - [x] `hpa.yaml`
 
 ## 3.3 Configure Helm values
 
-- [ ] Add frontend values:
+- [x] Add frontend values:
+- [x] Add backend values:
+- [x] Add ingress values:
+- [x] Add resource limits.
+- [x] Add autoscaling values.
 
-```yaml
-frontend:
-  image:
-    repository: ""
-    tag: ""
-  replicaCount: 2
-```
-
-- [ ] Add backend values:
-
-```yaml
-backend:
-  image:
-    repository: ""
-    tag: ""
-  replicaCount: 2
-  env:
-    databaseHost: ""
-    databaseName: ""
-```
-
-- [ ] Add ingress values:
-
-```yaml
-ingress:
-  enabled: true
-  host: ""
-```
-
-- [ ] Add resource limits.
-- [ ] Add autoscaling values.
-
-## 3.4 Test Helm locally
-
-- [ ] Use `kind`, `minikube`, or Docker Desktop Kubernetes.
-- [ ] Run:
+## 3.4 Test and install Helm locally
 
 ```bash
 helm lint helm/todo-app
 helm template todo-app helm/todo-app
-helm upgrade --install todo-app helm/todo-app --namespace todo --create-namespace
+helm install todo-app helm/todo-app --namespace todo --create-namespace \
+  -f helm/todo-app/values.yaml \
+  -f helm/todo-app/values-dev.private.yaml
 ```
 
-- [ ] Confirm pods are running:
+- [x] Confirm pods, delpoys, svc are running:
 
 ```bash
-kubectl get pods -n todo
+kubectl get pods,deploy,svc -n todo
+```
+
+- [x] Update the release:
+
+```bash
+helm upgrade --install todo-app helm/todo-app --namespace todo --create-namespace \
+  -f helm/todo-app/values.yaml \
+  -f helm/todo-app/values-dev.private.yaml
+```
+
+- [x] Rollback the release:
+
+```bash
+helm list
+helm history todo-ap
+helm rollback todo-app <revision-number>
 ```
 
 ## Deliverable
 
-- [ ] Helm chart deploys app successfully.
-- [ ] Helm chart supports configurable image tags.
-- [ ] App can run on local Kubernetes.
+- [x] Helm chart deploys app successfully.
+- [x] Helm chart supports configurable image tags.
+- [x] App can run on local Kubernetes.
 
 ---
 

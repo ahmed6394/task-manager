@@ -1,6 +1,6 @@
 # Todo List (Angular)
 
-Clean Angular 14 Todo app with local dev, Dockerized production, and Kubernetes manifests.
+Full-stack Todo app (Angular + FastAPI + Postgres) with Docker and Helm on Kubernetes.
 
 ## Quick start
 
@@ -15,18 +15,14 @@ Local URL: `http://localhost:4200`
 ## Architecture
 
 ```text
-Browser -> Angular SPA -> Nginx container -> Kubernetes Service (NodePort 30080) -> Pods (todo-list)
+Browser -> Angular SPA -> Nginx -> Service (frontend) -> Pods
+						  /api -> Service (backend) -> Pods -> Postgres
 ```
 
 - Frontend: Angular app in `src/app/` (`todo/` component + `Todo.model.ts`).
-- Container: multi-stage `Dockerfile` (`dev` for hot reload, `prod` with Nginx).
-- Orchestration: manifests in `k8s/` (`namespace`, `deployment`, `service`, optional `pod`).
+- Backend: FastAPI service with `/api` routes.
+- Orchestration: Helm chart in `helm/todo-app` (Deployments, Services, Secrets, Ingress).
 
-### UI preview placeholders
-
-- Desktop screenshot: `docs/screenshots/todo-desktop.png`
-- Mobile screenshot: `docs/screenshots/todo-mobile.png`
-- Demo GIF: `docs/gifs/todo-flow.gif`
 
 ## Run with Docker
 
@@ -69,48 +65,29 @@ Add these in GitHub repository settings:
 - `AWS_USER` - SSH user for that EC2 instance (example: `ubuntu`)
 - `AWS_KEY` - Full private key content (`.pem`) for EC2 SSH access
 
-Path in GitHub UI:
 
-`Repository -> Settings -> Secrets and variables -> Actions -> New repository secret`
 
-### Trigger and monitor pipeline
-
-1. Commit and push changes to `main`.
-2. Open the Actions tab in GitHub.
-3. Open the latest run of `CI/CD for todo-list App`.
-4. Check `build-and-push` and `deploy` job logs.
-
-### Verify deployment on EC2
+## Deploy to Kubernetes (Helm)
 
 ```bash
-docker ps
-docker logs todo-list
-curl http://localhost
+helm lint helm/todo-app
+helm template todo-app helm/todo-app
+helm install todo-app helm/todo-app \
+	--namespace todo --create-namespace \
+	-f helm/todo-app/values.yaml \
+	-f helm/todo-app/values-dev.private.yaml
+kubectl get po -n todo
+kubectl get deploy,svc -n todo
+helm upgrade --install todo-app helm/todo-app \
+	--namespace todo --create-namespace \
+	-f helm/todo-app/values.yaml \
+	-f helm/todo-app/values-dev.private.yaml
+helm list
+helm history todo-ap
+helm rollback todo-app <revision-number>
 ```
 
-### Common CI/CD issues
+### Helm values
 
-- `denied: requested access to the resource is denied`
-	- Check `DOCKER_USERNAME` and `DOCKER_PASSWORD` secrets.
-- `Permission denied (publickey)`
-	- Check `AWS_USER`, `AWS_HOST`, and `AWS_KEY` secrets.
-- Image not updated on EC2
-	- Confirm workflow pushed `v1` successfully.
-	- Confirm deploy job pulled `todo-list:v1` and restarted container.
-
-## Deploy to Kubernetes
-
-```bash
-kubectl apply -f k8s/namespace.yaml
-kubectl apply -f k8s/deployment.yaml
-kubectl apply -f k8s/service.yaml
-kubectl get pods -n kubernetes-cluster
-kubectl get svc -n kubernetes-cluster
-```
-
-## Scripts
-
-- `npm start` - dev server
-- `npm run build` - production build to `dist/todo_list`
-- `npm run watch` - watch build
-- `npm test` - unit tests (Karma)
+- Base values: `helm/todo-app/values.yaml`
+- Dev overrides: `helm/todo-app/values-dev.private.yaml` (secrets and env overrides)
