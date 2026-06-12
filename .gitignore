@@ -68,3 +68,6 @@ Thumbs.db
 # helm secrets
 helm/todo-app/values-dev.private.yaml
 helm/todo-app/instructions.md
+
+# infra secrets
+infra/terraform/environment/dev/terraform.tfvars
