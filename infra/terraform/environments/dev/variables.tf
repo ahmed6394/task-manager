@@ -15,3 +15,13 @@ variable "environment" {
   type = string
   default = "dev"
 }
+
+variable "vpc_id" {
+  description = "VPC ID for the EKS cluster"
+  type = string
+}
+
+variable "private_subnet_ids" {
+  description = "List of subnet IDs for the EKS worker nodes"
+  type = list(string)
+}
