@@ -44,3 +44,30 @@ module "eks" {
 
   tags                = local.common_tags
 }
+
+module "rds" {
+  source = "../../modules/rds"
+
+  project_name       = var.project_name
+  environment        = var.environment
+  vpc_id             = var.vpc_id
+  private_subnet_ids = var.private_subnet_ids
+  eks_node_security_group_id = module.eks.node_security_group_id
+
+  db_name            = var.db_name
+  db_username        = var.db_username
+  db_password        = var.db_password
+
+  tags                = local.common_tags
+}
+
+
+module "iam" {
+  source = "../../modules/iam"
+
+  project_name      = var.project_name
+  environment       = var.environment
+  tags              = local.common_tags
+  oidc_provider_arn = module.eks.oidc_provider_arn
+  oidc_provider_url = replace(module.eks.oidc_provider_url, "https://", "")
+}

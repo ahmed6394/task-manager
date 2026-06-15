@@ -37,3 +37,19 @@ output "eks_cluster_security_group_id" {
   description = "Security group ID for the EKS cluster created in the dev environment"
   value = module.eks.cluster_security_group_id
 }
+
+output "rds_endpoint" {
+  value = module.rds.rds_endpoint
+}
+
+output "rds_port" {
+  value = module.rds.rds_port
+}
+
+output "database_name" {
+  value = module.rds.database_name
+}
+
+output "lbc_role_arn" {
+  value = module.iam.lbc_role_arn
+}

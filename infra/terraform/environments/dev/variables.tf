@@ -25,3 +25,18 @@ variable "private_subnet_ids" {
   description = "List of subnet IDs for the EKS worker nodes"
   type = list(string)
 }
+
+variable "db_name" {
+  type    = string
+  default = "tododb"
+}
+
+variable "db_username" {
+  type      = string
+  sensitive = true
+}
+
+variable "db_password" {
+  type      = string
+  sensitive = true
+}

@@ -34,7 +34,7 @@ resource "aws_security_group" "cluster" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "Allow worker nodes to communicate with contr"
+    description = "Allow worker nodes to communicate with controle plane"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
@@ -49,6 +49,44 @@ resource "aws_security_group" "cluster" {
   }
 
   tags = var.tags
+}
+
+resource "aws_security_group" "node" {
+  name        = "${var.cluster_name}-node-sg"
+  description = "Security group for EKS worker nodes"
+  vpc_id      = var.vpc_id
+
+  egress {
+    description = "Allow all outbound"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = var.tags
+}
+
+# Allow cluster control plane to communicate with worker nodes
+resource "aws_security_group_rule" "cluster_to_node" {
+  type                     = "ingress"
+  from_port                = 1025
+  to_port                  = 65535
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.node.id
+  source_security_group_id = aws_security_group.cluster.id
+  description              = "Allow cluster control plane to communicate with worker nodes"
+}
+
+# Allow worker nodes to communicate with cluster control plane
+resource "aws_security_group_rule" "node_to_cluster" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.cluster.id
+  source_security_group_id = aws_security_group.node.id
+  description              = "Allow worker nodes to communicate with cluster control plane"
 }
 
 resource "aws_eks_cluster" "this" {
@@ -104,6 +142,30 @@ resource "aws_iam_role_policy_attachment" "node_ecr" {
   role       = aws_iam_role.node.name
 }
 
+resource "aws_iam_instance_profile" "node" {
+  name = "${var.cluster_name}-node-profile"
+  role = aws_iam_role.node.name
+}
+
+resource "aws_launch_template" "nodes" {
+  name_prefix = "${var.cluster_name}-lt-"
+
+  network_interfaces {
+    device_index                = 0
+    security_groups             = [aws_security_group.node.id]
+    associate_public_ip_address = false
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tag_specifications {
+    resource_type = "instance"
+    tags          = var.tags
+  }
+}
+
 resource "aws_eks_node_group" "this" {
   cluster_name    = aws_eks_cluster.this.name
   node_group_name = "${var.cluster_name}-ng"
@@ -117,6 +179,11 @@ resource "aws_eks_node_group" "this" {
   }
 
   instance_types = [var.node_instance_type]
+
+  launch_template {
+    id      = aws_launch_template.nodes.id
+    version = "$Latest"
+  }
 
   depends_on = [
     aws_iam_role_policy_attachment.node_worker,

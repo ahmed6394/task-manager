@@ -1,0 +1,9 @@
+vpc_id = "vpc-xxxxxxxxxxxxxxxxx"
+
+private_subnet_ids = [
+  "subnet-xxxxxxxxxxxxxxxxx",
+  "subnet-yyyyyyyyyyyyyyyyy"
+]
+
+db_username = "todoapp"
+db_password = "changeme123"
