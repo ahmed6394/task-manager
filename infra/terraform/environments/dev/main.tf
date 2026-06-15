@@ -60,3 +60,14 @@ module "rds" {
 
   tags                = local.common_tags
 }
+
+
+module "iam" {
+  source = "../../modules/iam"
+
+  project_name      = var.project_name
+  environment       = var.environment
+  tags              = local.common_tags
+  oidc_provider_arn = module.eks.oidc_provider_arn
+  oidc_provider_url = replace(module.eks.oidc_provider_url, "https://", "")
+}

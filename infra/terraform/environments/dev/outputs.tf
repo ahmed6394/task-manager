@@ -49,3 +49,7 @@ output "rds_port" {
 output "database_name" {
   value = module.rds.database_name
 }
+
+output "lbc_role_arn" {
+  value = module.iam.lbc_role_arn
+}

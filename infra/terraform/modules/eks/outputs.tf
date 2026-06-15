@@ -21,3 +21,7 @@ output "cluster_security_group_id" {
 output "node_security_group_id" {
   value = aws_security_group.node.id
 }
+
+output "oidc_provider_url" {
+  value = aws_eks_cluster.this.identity[0].oidc[0].issuer
+}
