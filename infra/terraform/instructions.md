@@ -1,4 +1,4 @@
-# Step-by-Step Hands-on Terraform Lab: EKS + RDS + IAM on AWS
+# Step-by-Step Hands-on Terraform implementation: EKS + RDS + IAM on AWS
 
 ## Step 0: Prerequisites Checklist
 
