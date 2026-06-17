@@ -71,3 +71,11 @@ module "iam" {
   oidc_provider_arn = module.eks.oidc_provider_arn
   oidc_provider_url = replace(module.eks.oidc_provider_url, "https://", "")
 }
+
+module "ecr" {
+  source = "../../modules/ecr"
+
+  project_name = var.project_name
+  environment   = var.environment
+  tags        = local.common_tags
+}

@@ -23,7 +23,7 @@ You need:
 3. Select **Programmatic access**
 4. Attach the following policies:
    - `AmazonEKSFullAccess`
-   - `AmazonEKSWorkerNodePolicy`
+   - `AmazonS3FullAccess`
    - `AmazonEC2FullAccess`
    - `AmazonRDSFullAccess`
    - `IAMFullAccess`
@@ -43,7 +43,10 @@ You need:
 
 ### Ubuntu / Linux
 ```bash
-sudo apt update && sudo apt install awscli -y
+sudo apt update && sudo apt install unzip
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
 ```
 
 Verify:
@@ -81,7 +84,9 @@ Terraform will automatically read credentials from here.
 
 ### Linux
 ```bash
-sudo apt-get update && sudo apt-get install -y terraform
+wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update && sudo apt install terraform
 ```
 
 Verify:
@@ -148,7 +153,24 @@ db_password = "changeme123"   # use a strong password
 
 ---
 
-## Step 7: Initialize Terraform
+## Step 7: Create S3 Bucket for Remote State
+
+```bash
+aws s3api create-bucket \
+  --bucket todo-list-terra-bucket \
+  --region eu-north-1 \
+  --create-bucket-configuration LocationConstraint=eu-north-1
+
+aws s3api put-bucket-versioning \
+  --bucket todo-list-terra-bucket \
+  --versioning-configuration Status=Enabled
+```
+
+Also check the S3 bucket name in `infra/terraform/environments/dev/backend.tf` matches the bucket name above.
+
+---
+
+## Step 8: Initialize Terraform
 
 ```bash
 terraform init
@@ -167,7 +189,7 @@ Terraform has been successfully initialized!
 
 ---
 
-## Step 8: Format and Validate
+## Step 9: Format and Validate
 
 ```bash
 terraform fmt -recursive
@@ -181,13 +203,13 @@ Success! The configuration is valid.
 
 ---
 
-## Step 9: See What Terraform Will Do (Safe Step)
+## Step 10: See What Terraform Will Do (Safe Step)
 
 ```bash
 terraform plan
 ```
 
-**It should show resources to be created across 3 modules:**
+**It should show resources to be created across 4 modules:**
 
 EKS module:
 - `aws_eks_cluster`
@@ -204,14 +226,20 @@ RDS module:
 
 IAM module:
 - `aws_iam_role` — Load Balancer Controller
-- `aws_iam_policy` — ELB, EC2, ACM, WAF permissions
-- `aws_iam_role_policy_attachment`
+- `aws_iam_role` — GitHub Actions
+- `aws_iam_policy` — LBC permissions
+- `aws_iam_policy` — GitHub Actions permissions
+- `aws_iam_openid_connect_provider` — GitHub Actions OIDC
+
+ECR module:
+- `aws_ecr_repository` — frontend
+- `aws_ecr_repository` — backend
 
 No actual changes are made at this step. Review the plan carefully before applying.
 
 ---
 
-## Step 10: Apply to Create All Resources
+## Step 11: Apply to Create All Resources
 
 ```bash
 terraform apply
@@ -236,13 +264,16 @@ rds_endpoint                           = "todo-list-devops-dev-rds.xxxxxxxxx.eu-
 rds_port                               = 5432
 database_name                          = "tododb"
 lbc_role_arn                           = "arn:aws:iam::123456789:role/todo-list-devops-dev-lbc-role"
+github_actions_role_arn                = "arn:aws:iam::123456789:role/todo-list-devops-dev-github-actions-role"
+frontend_repository_url                = "xxxxxxxxx.eu-north-1.amazonaws.com/todo-list-devops-dev-frontend"
+backend_repository_url                 = "xxxxxxxxx.dkr.ecr.eu-north-1.amazonaws.com/todo-list-devops-dev-backend"
 ```
 
 ⏳ **Note:** EKS cluster creation takes approximately 10-15 minutes. RDS takes an additional 5-10 minutes. Please wait for the process to complete.
 
 ---
 
-## Step 11: Verify in AWS Console
+## Step 12: Verify in AWS Console
 
 ### EKS
 1. Go to **EKS → Clusters**
@@ -263,12 +294,35 @@ lbc_role_arn                           = "arn:aws:iam::123456789:role/todo-list-
 
 ### IAM
 1. Go to **IAM → Roles**
-2. Look for: `todo-list-devops-dev-lbc-role`
-3. Verify the trust policy references your OIDC provider
+2. Look for:
+   - `todo-list-devops-dev-lbc-role`
+   - `todo-list-devops-dev-github-actions-role`
+3. Verify each trust policy references the correct OIDC provider
+
+### ECR
+1. Go to **ECR → Repositories**
+2. Look for:
+   - `todo-list-devops-dev-frontend`
+   - `todo-list-devops-dev-backend`
+3. Verify image scanning is enabled on both
 
 ---
 
-## Step 12: Configure kubectl
+## Step 13: Configure GitHub Actions Secrets
+
+Go to your repo → **Settings → Secrets and variables → Actions** and add:
+
+| Secret | Value |
+|---|---|
+| `AWS_ACCOUNT_ID` | Your 12-digit AWS account ID |
+| `AWS_REGION` | `eu-north-1` |
+| `AWS_ROLE_ARN` | Value of `github_actions_role_arn` output from Step 11 |
+
+⚠️ **Never** add your AWS Access Key or Secret Key as GitHub secrets — the OIDC role handles authentication securely without static credentials.
+
+---
+
+## Step 14: Configure kubectl
 
 To interact with your EKS cluster:
 
@@ -287,7 +341,7 @@ kubectl get nodes
 
 ---
 
-## Step 13: Destroy (IMPORTANT)
+## Step 15: Destroy (IMPORTANT)
 
 When you are done, clean up all resources to avoid unexpected AWS charges:
 
@@ -304,11 +358,12 @@ Type **yes** when prompted to confirm.
 - RDS PostgreSQL instance and subnet group
 - All IAM roles and policies
 - All security groups
-- OIDC provider
+- OIDC providers
+- ECR repositories
 
 ---
 
-## Step 14: Prod Checklist
+## Step 16: Prod Checklist
 
 Before promoting to `environments/prod`, update these values:
 
@@ -319,5 +374,6 @@ Before promoting to `environments/prod`, update these values:
 - [ ] Restrict `public_access_cidrs` on EKS cluster
 - [ ] Enable EKS control plane logging
 - [ ] Use larger instance types (`db.t3.small` or above for RDS, `t3.large` for nodes)
+- [ ] Scope GitHub Actions IAM role to `main` branch only
 
 CHEERS!
