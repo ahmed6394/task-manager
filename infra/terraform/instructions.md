@@ -265,8 +265,8 @@ rds_port                               = 5432
 database_name                          = "tododb"
 lbc_role_arn                           = "arn:aws:iam::123456789:role/todo-list-devops-dev-lbc-role"
 github_actions_role_arn                = "arn:aws:iam::123456789:role/todo-list-devops-dev-github-actions-role"
-frontend_repository_url                = "123456789.dkr.ecr.eu-north-1.amazonaws.com/todo-list-devops-dev-frontend"
-backend_repository_url                 = "123456789.dkr.ecr.eu-north-1.amazonaws.com/todo-list-devops-dev-backend"
+frontend_repository_url                = "xxxxxxxxx.eu-north-1.amazonaws.com/todo-list-devops-dev-frontend"
+backend_repository_url                 = "xxxxxxxxx.dkr.ecr.eu-north-1.amazonaws.com/todo-list-devops-dev-backend"
 ```
 
 ⏳ **Note:** EKS cluster creation takes approximately 10-15 minutes. RDS takes an additional 5-10 minutes. Please wait for the process to complete.
